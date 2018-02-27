@@ -1,4 +1,5 @@
-defmodule Words do
+defmodule Hangman.Words do
+  alias Hangman.Player
   @hangman_words_filepath "../data/test.txt"
 
   def take_word() do
@@ -40,9 +41,10 @@ defmodule Words do
     Enum.map(0..(len - 1), fn x -> if x == index, do: "*", else: Enum.at(originalw_list, x) end)
   end
 
-  def guess_word(), do: IO.gets("ENTER A CHARACTER: ") |> String.trim()
+  def guess_word(), do: IO.gets("ENTER A CHARACTER: ") |> String.upcase() |> String.trim()
 
   def match_guess(originalw_list, guess_list, chance) do
+    Player.left(chance, guess_list)
     guess = guess_word()
 
     if guess in originalw_list do
@@ -53,14 +55,14 @@ defmodule Words do
   end
 
   def next_chance({originalw_list, guess_list}, 0) do
-    # show(0, originalw_list, guess_list)
+    Player.left(0, originalw_list, guess_list)
   end
 
   def next_chance({originalw_list, guess_list}, chance) do
     if(
       "*" in guess_list,
       do: match_guess(originalw_list, guess_list, chance),
-      else: IO.puts("#{guess_list}")
+      else: IO.puts("YOU ARE WINNER : #{guess_list}")
     )
   end
 
@@ -73,4 +75,4 @@ defmodule Words do
   end
 end
 
-Words.take_word()
+# Words.take_word()
