@@ -1,7 +1,7 @@
 defmodule Hangman.Player do
   def left(chance, guess_list) do
     IO.puts(drawing(chance))
-    IO.puts("#/{guess_list}")
+    IO.puts("#{guess_list}")
   end
 
   def left(0, guess_list, originalw_list) do

@@ -1,13 +1,14 @@
 defmodule Hangman.Words do
   alias Hangman.Player
-  @hangman_words_filepath "../data/test.txt"
+  @hangman_words_filepath "/home/nino/hangman_game/data/test.txt"
 
   def take_word() do
     {:ok, allwords} = File.read(@hangman_words_filepath)
 
     allwords
-    |> String.split()
+    |> String.split("\n")
     |> Enum.random()
+    |> String.upcase()
     |> game_play()
 
     # {String.length(word), word}
@@ -48,6 +49,7 @@ defmodule Hangman.Words do
     guess = guess_word()
 
     if guess in originalw_list do
+      # IO.puts("I;am if ")
       check_word(originalw_list, guess_list, guess) |> next_chance(chance)
     else
       next_chance({originalw_list, guess_list}, chance - 1)
@@ -62,15 +64,15 @@ defmodule Hangman.Words do
     if(
       "*" in guess_list,
       do: match_guess(originalw_list, guess_list, chance),
-      else: IO.puts("YOU ARE WINNER : #{guess_list}")
+      else: IO.puts("YOU ARE WINNER : #{guess_list} ")
     )
   end
 
   def game_play(word) do
     originalw_list = String.graphemes(word)
-
+    IO.inspect(originalw_list)
+    # IO.puts("I'am game_play")
     guess_list = word |> String.graphemes() |> Enum.map(fn _x -> "*" end) |> IO.inspect()
-
     match_guess(originalw_list, guess_list, 6)
   end
 end

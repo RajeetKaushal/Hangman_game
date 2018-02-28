@@ -5,15 +5,16 @@ defmodule Hangman_game do
     GenServer.start_link(__MODULE__, [], name: :Hangman_game)
   end
 
-  def init(args) do
-    {:ok, args}
+  def init([]) do
+    {:ok, []}
   end
 
-  def show() do
-    GenServer.call(:Hangman_game, {:display})
+  def start() do
+    GenServer.cast(:Hangman_game, {:start})
   end
 
-  def handle_cast({:display}, state) do
+  def handle_cast({:start}, state) do
+    Hangman.Words.take_word()
     {:noreply, state}
   end
 end
